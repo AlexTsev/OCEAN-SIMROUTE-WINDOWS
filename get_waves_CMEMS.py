@@ -10,8 +10,15 @@ from simroute import *      #Aquest modul ja carrega el parms_PROD
 import os
 import datetime
 import copernicusmarine
+from credentials import CMEMS_USER, CMEMS_PWD
 
+# --------------------------------------------------
+# --------- USER CONFIGURATION --------------------
+# --------------------------------------------------
 
+# Copernicus Marine credentials
+# initialize login
+copernicusmarine.login(username=CMEMS_USER, password=CMEMS_PWD)
 
 # END OF USER INPUTS   #######################
 
