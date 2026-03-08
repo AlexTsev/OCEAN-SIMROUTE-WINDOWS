@@ -1,0 +1,74 @@
+
+[notice] A new release of pip is available: 23.2.1 -> 26.0.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE>
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> python -c "import platform; print(platform.architecture())"
+('64bit', 'WindowsPE')
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> SET GEOS_DIR=D:\libs\geos-3.11
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> SET PROJ_DIR=D:\libs\proj-9.1.0
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> SET INCLUDE=D:\libs\geos-3.11\include;D:\libs\proj-9.1.0\include
+D:\libs\proj-9.1.0\include : The term 'D:\libs\proj-9.1.0\include' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:39
++ SET INCLUDE=D:\libs\geos-3.11\include;D:\libs\proj-9.1.0\include
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\libs\proj-9.1.0\include:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> SET LIB=D:\libs\geos-3.11\lib;D:\libs\proj-9.1.0\lib
+D:\libs\proj-9.1.0\lib : The term 'D:\libs\proj-9.1.0\lib' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:31
++ SET LIB=D:\libs\geos-3.11\lib;D:\libs\proj-9.1.0\lib
++                               ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\libs\proj-9.1.0\lib:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> SET PATH=D:\libs\geos-3.11\bin;D:\libs\proj-9.1.0\bin;%PATH%
+D:\libs\proj-9.1.0\bin : The term 'D:\libs\proj-9.1.0\bin' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:32
++ SET PATH=D:\libs\geos-3.11\bin;D:\libs\proj-9.1.0\bin;%PATH%
++                                ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\libs\proj-9.1.0\bin:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+%PATH% : The term '%PATH%' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:55
++ SET PATH=D:\libs\geos-3.11\bin;D:\libs\proj-9.1.0\bin;%PATH%
++                                                       ~~~~~~
+    + CategoryInfo          : ObjectNotFound: (%PATH%:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> SET INCLUDE=D:\libs\geos-3.11\include;D:\libs\proj-9.1.0\include
+D:\libs\proj-9.1.0\include : The term 'D:\libs\proj-9.1.0\include' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:39
++ SET INCLUDE=D:\libs\geos-3.11\include;D:\libs\proj-9.1.0\include
++                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (D:\libs\proj-9.1.0\include:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> setx INCLUDE "D:\libs\geos-3.11\include;D:\libs\proj-9.1.0\include"
+
+SUCCESS: Specified value was saved.
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> setx LIB "D:\libs\geos-3.11\lib;D:\libs\proj-9.1.0\lib"
+
+SUCCESS: Specified value was saved.
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> setx PATH "D:\libs\geos-3.11\bin;D:\libs\proj-9.1.0\bin;%PATH%"
+
+SUCCESS: Specified value was saved.
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> setx GEOS_DIR "D:\libs\geos-3.11"
+
+SUCCESS: Specified value was saved.
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> setx PROJ_DIR "D:\libs\proj-9.1.0"
+
+SUCCESS: Specified value was saved.
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> echo %GEOS_DIR%
+%GEOS_DIR%
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> echo %PROJ_DIR%
+%PROJ_DIR%
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> $env:GEOS_DIR = "D:\libs\geos-3.11"
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> $env:PROJ_DIR = "D:\libs\proj-9.1.0"
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> $env:INCLUDE = "D:\libs\geos-3.11\include;D:\libs\proj-9.1.0\include"
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> $env:LIB = "D:\libs\geos-3.11\lib;D:\libs\proj-9.1.0\lib"
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> $env:PATH = "D:\libs\geos-3.11\bin;D:\libs\proj-9.1.0\bin;" + $env:PATH
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> echo $env:GEOS_DIR
+D:\libs\geos-3.11
+(venv) PS D:\Documents\PycharmProjects\Ocean SIMROUTE> echo $env:PROJ_DIR
