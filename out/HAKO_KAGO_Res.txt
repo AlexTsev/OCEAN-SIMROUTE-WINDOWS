@@ -1,0 +1,19 @@
+              SIMROUTE report:     HAKO_KAGO
+=========================================================================
+
+Initial Velocity in knots = 16.1 
+WEN_form = 1 
+Departure:  Node = 321587  --  coordinates  (141.6750,42.5000)
+Departure time (day-month-year hour:min): 23-11-2022 0:00
+Arrival:     Node =  25852  --  coordinates  (131.3000,31.0000)
+Number of nodes: Nx=   642   Ny=   522   Nx*Ny=335124   
+Geodetic Distance (in milles): 849.94
+ 
+========================================================================
+                                        Sailed hours    Sailed milles
+Route Optimized:                           65.71            984.96    
+Route Minimum Distance:                   66.47            980.11    
+Route Minimum Distance (without waves):    60.88            980.11    
+
+========================================================================
+

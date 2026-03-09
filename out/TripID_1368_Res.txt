@@ -1,0 +1,19 @@
+              SIMROUTE report:     TripID_1368
+=========================================================================
+
+Initial Velocity in knots = 12.92 
+WEN_form = 1 
+Departure:  Node =    165  --  coordinates  (-84.5879,24.6693)
+Departure time (day-month-year hour:min): 26-4-2022 20:00
+Arrival:     Node =   8632  --  coordinates  (-38.4629,24.7193)
+Number of nodes: Nx=  3311   Ny=  1040   Nx*Ny=3443440   
+Geodetic Distance (in milles): 2501.91
+ 
+========================================================================
+                                        Sailed hours    Sailed milles
+Route Optimized:                          201.50            2515.14    
+Route Minimum Distance:                  201.83            2512.41    
+Route Minimum Distance (without waves):   194.46            2512.41    
+
+========================================================================
+
