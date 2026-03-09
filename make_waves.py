@@ -62,9 +62,9 @@ hs_rec=np.zeros(shape=(Ny,Nx,ntim))
 #fp_rec=np.zeros(shape=(Ny,Nx,ntim))
 dir_rec=np.zeros(shape=(Ny,Nx,ntim))
 '''
-    Degut a que les variebles extretates dels nc tenen un compotament diferent
-    En el cas que  hagin punts "land" o que no hi hagi cap punt land hem de fer
-    un procediment diferent en cada cas:
+    Because the variables extracted from the nc have a different behavior, 
+    in the case that there are "land" points or that there are no land points, 
+    we must perform a different procedure in each case::
 '''
 
 #mnc=Dataset(dir_arx+ARX[0],'r')
@@ -80,7 +80,7 @@ else:
 #    nc=Dataset(dir_arx+ARX[n],'r')
 #    print(dir_arx+ARX[n])
 toc()
-print(' unitat de temps')
+print(' unit of time')
 print(ntim)
 for t in range(ntim):
     print(t)

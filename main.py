@@ -333,7 +333,7 @@ if plot_routes==1:
         for i in range(Nx):
               hs_rec[j,i]=hs[:,t][i+Nx*j]
            #   dir_rec[j,i]=dir[:,t][i+Nx*j]
-    print('Faig un gràfic puc trigar una bona estona si la malla es gran\n pots posar la variable plot_routes a 0 en el params')
+    print('Generating the plot may take some time if the mesh is large. You can set the plot_routes variable to 0 in the params to skip plotting')
     plt.pcolor(Xnod,Ynod,hs_rec)
     vmax=np.nanmax(hs)
     plt.clim(0,vmax)
