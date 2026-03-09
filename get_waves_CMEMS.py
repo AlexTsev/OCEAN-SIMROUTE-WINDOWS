@@ -28,7 +28,8 @@ if prod=='GLOBAL':
    # CMEMS_product=' --product-id global-analysis-forecast-wav-001-027 '
     varfll   = '--variable VHM0 --variable VMDR --variable VTPK'
     retall='--longitude-min ' + str(LonMin-dx)  +' --longitude-max '+ str(LonMax+dx) +' --latitude-min ' + str(LatMin-dx) + ' --latitude-max '+str(LatMax+dx)+' ' # Coordenades Limit.Cada cas especial
-    ID_DTSET='cmems_mod_glo_wav_anfc_0.083deg_PT3H-i'
+    ID_DTSET = 'cmems_mod_glo_wav_my_0.2deg_PT3H-i'
+    #ID_DTSET='cmems_mod_glo_wav_anfc_0.083deg_PT3H-i'
     DT_VER="202411"
     # a partir del   1/11/2022 03:00
 if prod=='MEDSEA':
