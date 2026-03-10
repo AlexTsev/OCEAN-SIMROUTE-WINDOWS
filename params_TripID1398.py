@@ -11,8 +11,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 #Simulation name
-name_Simu='TripID_1398' #WEST OF INDIA (SW OF GUJARAT) --> SOUTH EAST OF BRAZIL(SOUTH EAST OF RIO DE JANEIRO)
-prod='GLOBAL'
+name_Simu = 'TripID_1398' #WEST OF INDIA (SW OF GUJARAT) --> SOUTH EAST OF BRAZIL(SOUTH EAST OF RIO DE JANEIRO)
+prod = 'GLOBAL'
 
 date_Ini = [2023, 4, 6]  # [year,month,day]
 date_End = [2023 , 5, 5]
@@ -22,7 +22,7 @@ start_lon, start_lat = 69.69871307204315, 22.622512804025988
 end_lon, end_lat = -35.763883893187845, -26.15147743658466
 
 # Calculate mesh boundaries (with extension)
-mesh_extension = 1.0  # degrees
+mesh_extension = 2  # degrees
 
 #calculate Longmin,Lonmax,Latmin,Latmax + Mesh boundaries
 LonMin = min(start_lon, end_lon) - mesh_extension
@@ -38,17 +38,41 @@ print(f"LatMax: {LatMax}\n")
 
 
 #Grid-step in Miles
-inc=1.5    #in nautical miles
+inc=12    #in nautical miles
 
 #Extension added at boundaries (in degrees)
-dx= 0.5
+#dx= 2
+dx = inc/10
 
 Nx = int((LonMax - LonMin) / dx) + 1
 
+"""
 def coord_to_node(lon, lat):
     i = round((lon - LonMin) / dx)
     j = round((lat - LatMin) / dx)
     return j * Nx + i
+"""
+def coord_to_node(lon, lat):
+    # convert coordinates to grid indices
+    i = int((lon - LonMin) / dx)
+    j = int((lat - LatMin) / dx)
+
+    # Έλεγχος ορίων για να μην βγει εκτός grid
+    if i < 0:
+        i = 0
+    if j < 0:
+        j = 0
+    if i >= Nx:
+        i = Nx - 1
+
+    Ny = int((LatMax - LatMin) / dx) + 1
+    if j >= Ny:
+        j = Ny - 1
+
+    # convert to node index
+    node = j * Nx + i
+
+    return node
 
 # Initial node in mesh:
 nodIni = coord_to_node(start_lon, start_lat) #[7.33,37.60]
@@ -76,7 +100,7 @@ t_ini=6
 #    lcd_out= 'in/ldcK1.npz'
 
 #Sailing velocity (in knots)
-v0=12.01  # Cruising speed in nautical milles per hour (in knots)
+v0=12.03  # Cruising speed in nautical milles per hour (in knots)
 
 #Formulation WEN (Wave Effect on Navigation)
     #Bowditch = 1; Aertessen = 2; Khokhlov = 3; no reduction = 4
