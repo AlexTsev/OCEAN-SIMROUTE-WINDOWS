@@ -16,6 +16,10 @@ import numpy as np
 import sys
 #from mpl_toolkits.basemap import Basemap
 
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+import os
+
 tic()
 mxcost=0  
 mxdks=0  
@@ -59,10 +63,10 @@ if flag is  False:
  ''' 
  ##
 ''' 
-     Fem primer 
-     dos casos diferents i=0 ,i=1
-     i=0  Cas que la velocitat del vaixell es veu alterada per 
-     la longitud i direccio d'ona  i=1  La velocitat del vaixell es v0 constant
+Let's first
+do two different cases i=0 ,i=1
+i=0 Case where the speed of the ship is altered by
+the length and direction of the wave i=1 The speed of the ship is constant v0
 '''
 Ldebug=[]
 print('Working very hard....!')
@@ -121,8 +125,8 @@ for i in range(2):
     L_t=[]
     L_c=[]   # LLista amb els costos columna 1 del setled
     nod_p =nodEnd   
-    ''' comencem pel ultim node i anem mirant els pares de cada node fins 
-        anar al nodIni
+    ''' we start with the last node and look at the parents of each node 
+        until we reach the Ini node
     '''
     L_t.append(nodEnd)
     L_c.append(setled[nodEnd,1])
@@ -150,10 +154,10 @@ n=len(L_TripFix)
 distConst=0
 for i in range(n-1):
     distConst=distConst+dist_nods(L_TripFix[i],L_TripFix[i+1])
-''' Tercera part de la simulacio:
-    Considerem que un vaixell va per la ruta que hem dit constant
-    pero tenin en compte la velocitat si es afectada pel onatge
-    En direm ruta ctw
+''' Third part of the simulation:
+We consider that a ship goes along the route that we have called constant
+but take into account the speed if it is affected by the waves
+We will call it the ctw route
 '''   
 CostCtw=0
 Cost_Min=[]
@@ -221,7 +225,7 @@ st='Route Minimum Distance (without waves):   {:6.2f}            {:6.2f}    \n'
 print(st.format(CostConst,distConst))
 frep.write(st.format(CostConst,distConst))
 st='\n========================================================================\n\n'
-'''  ara gravem resultats posem com nom
+'''  now we record results we put as name
 
 '''
 print('-------------- SIMROUTE DONE ---------------------')
@@ -294,49 +298,215 @@ frout.close()
 
 print ('File simulation rout created')
 toc()
-if plot_routes==1:
-    plt.figure(1)
-    plt.title( name_Simu) #+ ' make_plot temps = {}'.format(i))
-    plt.xlim([LonMin, LonMax])
-    plt.ylim([LatMin, LatMax])
-   
-    lont=nodes[L_Trip[:],0]
-    latt=nodes[L_Trip[:],1] 
-    
-    lonc=nodes[L_TripFix[:],0]
-    latc=nodes[L_TripFix[:],1]
-    
-    plt.plot(lonc,latc,linewidth=1.5,color='orange')
-    plt.plot(lont,latt,'m-')
-    plt.legend(('Minimum Distance','Optimized'),loc='best')
-    #Re-build Mesh:
-    inc=inc/60    
-    Nx=int(np.floor((LonMax-LonMin)/inc)+2)
-    Ny=int(np.floor((LatMax-LatMin)/inc)+2)
-    tira_lon=[]
-    for i in range(Nx):
-        tira_lon.append(LonMin+i*inc)
-    tira_lat=[]
-    for j in range(Ny):  
-        tira_lat.append(LatMin+j*inc)
-    nodes=np.zeros((Nx*Ny,2))
-    for j in range(Ny):   
-        for i in range(Nx):
-            nodes[Nx*j +i,0]=tira_lon[i]
-            nodes[Nx*j +i,1]=tira_lat[j]
-    inc=inc*60
-    Xnod, Ynod = np.meshgrid(tira_lon,tira_lat)
-    hs_rec=np.zeros(shape=Xnod.shape)
-    dir_rec=np.copy(hs_rec)
-    t=6
+# -------------------- Standard 2D plot --------------------
+if plot_routes == 1:
+
+    import os
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import cartopy.crs as ccrs
+    import cartopy.feature as cfeature
+
+    # =====================================================
+    # Helper function
+    # =====================================================
+    def distL(cost_vector, t):
+        idx = 0
+        while idx < len(cost_vector) and cost_vector[idx] <= t:
+            idx += 1
+        return idx
+
+    # =====================================================
+    # Rebuild grid (same mesh as simulation)
+    # =====================================================
+    inc_deg = inc / 60.0
+    Nx = int(np.floor((LonMax - LonMin) / inc_deg) + 2)
+    Ny = int(np.floor((LatMax - LatMin) / inc_deg) + 2)
+
+    tira_lon = [LonMin + i*inc_deg for i in range(Nx)]
+    tira_lat = [LatMin + j*inc_deg for j in range(Ny)]
+
+    nodes_mesh = np.zeros((Nx*Ny,2))
     for j in range(Ny):
         for i in range(Nx):
-              hs_rec[j,i]=hs[:,t][i+Nx*j]
-           #   dir_rec[j,i]=dir[:,t][i+Nx*j]
-    print('Generating the plot may take some time if the mesh is large. You can set the plot_routes variable to 0 in the params to skip plotting')
-    plt.pcolor(Xnod,Ynod,hs_rec)
-    vmax=np.nanmax(hs)
-    plt.clim(0,vmax)
-    plt.colorbar()
+            nodes_mesh[Nx*j+i,0] = tira_lon[i]
+            nodes_mesh[Nx*j+i,1] = tira_lat[j]
+
+    Xnod, Ynod = np.meshgrid(tira_lon, tira_lat)
+    vmax_hs = np.nanmax(hs)
+
+    # =====================================================
+    # Create output directory for simulation
+    # =====================================================
+    output_dir = os.path.join("out/plots", name_Simu)
+    os.makedirs(output_dir, exist_ok=True)
+
+    # =====================================================
+    # 1️⃣ STANDARD 2D MAP
+    # =====================================================
+    t_plot = 6
+    hs_rec = hs[:, t_plot].reshape((Ny,Nx))
+
+    fig, ax = plt.subplots(figsize=(10,8))
+    im = ax.pcolor(Xnod, Ynod, hs_rec, cmap="viridis", vmin=0, vmax=vmax_hs)
+    plt.colorbar(im, ax=ax, label="Wave height [m]")
+
+    ax.plot(nodes_mesh[L_TripFix,0], nodes_mesh[L_TripFix,1],"orange", linewidth=2, label="Minimum Distance")
+    ax.plot(nodes_mesh[L_Trip,0], nodes_mesh[L_Trip,1], "m", linewidth=2, label="Optimized Route")
+    ax.scatter(nodes_mesh[nodIni,0], nodes_mesh[nodIni,1], color="blue", marker="^", s=120, label="Departure")
+    ax.scatter(nodes_mesh[nodEnd,0], nodes_mesh[nodEnd,1], color="red", marker="X", s=120, label="Arrival")
+    ax.set_xlabel("Longitude")
+    ax.set_ylabel("Latitude")
+    ax.set_title(name_Simu + " - Standard 2D Wave Map")
+    ax.legend()
+
+    standard_map_file = os.path.join(output_dir, name_Simu + "_Standard2DMap.png")
+    fig.savefig(standard_map_file, dpi=300)
     plt.show()
-print('End main.py')
+    plt.close(fig)
+
+    # =====================================================
+    # 2️⃣ ROUTE + WAVES ANIMATION FRAMES
+    # =====================================================
+    print("Creating route-wave frames...")
+
+    nred = 7
+    sc = 75
+    wd_quiver = 0.002
+    inc_frame = 1
+
+    hsmax = np.nanmax(hs)
+    nmax = Cost_Min[-1]
+    n_frames = np.int_(np.arange(0, nmax, inc_frame))
+    frame_list = n_frames.tolist()
+    frame_list.append(int(np.ceil(nmax)))
+
+    print("Frames to create:", len(frame_list))
+    k = 0
+
+    for t in frame_list:
+
+        if time_res == 1:
+            hs_rec = hs[:,int(t)].reshape((Ny,Nx))
+            dir_rec = dir[:,int(t)].reshape((Ny,Nx)) + 180
+        else:
+            idx = int(np.round(t/3))
+            hs_rec = hs[:,idx].reshape((Ny,Nx))
+            dir_rec = dir[:,idx].reshape((Ny,Nx)) + 180
+
+        U = hs_rec*np.sin(np.deg2rad(dir_rec))
+        V = hs_rec*np.cos(np.deg2rad(dir_rec))
+
+        tl = distL(Cost_Opt, t) if t < Cost_Opt[-1] else len(Cost_Opt)
+        tc = distL(Cost_Min, t) if t < Cost_Min[-1] else len(Cost_Min)
+
+        lon_opt = nodes_mesh[L_Trip[0:tl],0]
+        lat_opt = nodes_mesh[L_Trip[0:tl],1]
+        lon_min = nodes_mesh[L_TripFix[0:tc],0]
+        lat_min = nodes_mesh[L_TripFix[0:tc],1]
+
+        fig, ax = plt.subplots(figsize=(7,7))
+        im = ax.pcolor(Xnod, Ynod, hs_rec, vmin=0, vmax=hsmax)
+        ax.plot(lon_min, lat_min, "orange", label="Minimum distance route")
+        ax.plot(lon_opt, lat_opt, "m", label="Optimized route")
+        ax.scatter(nodes_mesh[nodIni,0], nodes_mesh[nodIni,1], color="blue", marker="^", s=120, label="Departure")
+        ax.scatter(nodes_mesh[nodEnd,0], nodes_mesh[nodEnd,1], color="red", marker="X", s=120, label="Arrival")
+        ax.quiver(Xnod[::nred,::nred], Ynod[::nred,::nred], U[::nred,::nred], V[::nred,::nred], scale=sc, width=wd_quiver)
+        ax.set_title(name_Simu + " time = {:.2f} hours".format(t))
+        ax.legend()
+        plt.colorbar(im, ax=ax)
+
+        fig_file = os.path.join(output_dir, f"{name_Simu}_frame_{k:03d}.png")
+        fig.savefig(fig_file, dpi=300)
+        plt.close(fig)
+        k += 1
+
+    print(f"All {k} frames created.")
+    print("Generating Projected Maps... (this may take a few seconds)")
+
+    # =====================================================
+    # Show last animation frame
+    # =====================================================
+    last_t = frame_list[-1]
+    if time_res == 1:
+        hs_rec = hs[:, int(last_t)].reshape((Ny, Nx))
+        dir_rec = dir[:, int(last_t)].reshape((Ny, Nx)) + 180
+    else:
+        idx = int(np.round(last_t / 3))
+        hs_rec = hs[:, idx].reshape((Ny, Nx))
+        dir_rec = dir[:, idx].reshape((Ny, Nx)) + 180
+
+    U = hs_rec * np.sin(np.deg2rad(dir_rec))
+    V = hs_rec * np.cos(np.deg2rad(dir_rec))
+
+    tl = distL(Cost_Opt, last_t) if last_t < Cost_Opt[-1] else len(Cost_Opt)
+    tc = distL(Cost_Min, last_t) if last_t < Cost_Min[-1] else len(Cost_Min)
+
+    lon_opt = nodes_mesh[L_Trip[0:tl], 0]
+    lat_opt = nodes_mesh[L_Trip[0:tl], 1]
+    lon_min = nodes_mesh[L_TripFix[0:tc], 0]
+    lat_min = nodes_mesh[L_TripFix[0:tc], 1]
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+    im = ax.pcolor(Xnod, Ynod, hs_rec, vmin=0, vmax=hsmax)
+    ax.plot(lon_min, lat_min, "orange", label="Minimum distance route")
+    ax.plot(lon_opt, lat_opt, "m", label="Optimized route")
+    ax.scatter(nodes_mesh[nodIni, 0], nodes_mesh[nodIni, 1], color="blue", marker="^", s=120, label="Departure")
+    ax.scatter(nodes_mesh[nodEnd, 0], nodes_mesh[nodEnd, 1], color="red", marker="X", s=120, label="Arrival")
+    ax.quiver(Xnod[::nred, ::nred], Ynod[::nred, ::nred], U[::nred, ::nred], V[::nred, ::nred], scale=sc, width=wd_quiver)
+    ax.set_title(name_Simu + " - Last Frame (t={:.2f} hours)".format(last_t))
+    ax.legend()
+    plt.colorbar(im, ax=ax)
+    plt.show()
+    plt.close(fig)
+
+
+    # =====================================================
+    # 3️⃣ PROJECTED MAPS (Plate-Carree + Lambert)
+    # =====================================================
+    offset = 0.2
+    pc = ccrs.PlateCarree()
+    lambert = ccrs.LambertConformal(
+        central_longitude=(LonMin+LonMax)/2,
+        central_latitude=(LatMin+LatMax)/2
+    )
+    geo = ccrs.Geodetic()
+    extent = [LonMin-offset, LonMax+offset, LatMin-offset, LatMax+offset]
+
+    fig = plt.figure(figsize=(20,10))
+
+    # Plate-Carree
+    ax_pc = plt.subplot(1,2,1, projection=pc)
+    im_pc = ax_pc.pcolor(Xnod, Ynod, hs_rec, vmin=0, vmax=vmax_hs, cmap='viridis', transform=pc)
+    plt.colorbar(im_pc, ax=ax_pc, label='Wave height [m]')
+    ax_pc.set_extent(extent)
+    ax_pc.add_feature(cfeature.LAND)
+    ax_pc.coastlines(resolution='10m')
+    ax_pc.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
+    ax_pc.plot(lon_min, lat_min, 'orange', transform=pc, label='Minimum Distance')
+    ax_pc.plot(lon_opt, lat_opt, 'm', transform=pc, label='Optimized')
+    ax_pc.plot(nodes_mesh[nodIni,0], nodes_mesh[nodIni,1], '^', color="blue", transform=pc, label='Departure')
+    ax_pc.plot(nodes_mesh[nodEnd,0], nodes_mesh[nodEnd,1], 'X', color="red", transform=pc, label='Arrival')
+    ax_pc.quiver(Xnod, Ynod, U.reshape(Xnod.shape), V.reshape(Xnod.shape), scale=75, width=0.002, pivot='middle', transform=pc)
+    ax_pc.legend(loc='best')
+    ax_pc.set_title(f'{name_Simu} (Plate-Carree) - t={last_t}h')
+
+    # Lambert
+    ax_lam = plt.subplot(1,2,2, projection=lambert)
+    im_lam = ax_lam.pcolor(Xnod, Ynod, hs_rec, vmin=0, vmax=vmax_hs, cmap='viridis', transform=pc)
+    plt.colorbar(im_lam, ax=ax_lam, label='Wave height [m]')
+    ax_lam.set_extent(extent, crs=pc)
+    ax_lam.add_feature(cfeature.LAND)
+    ax_lam.coastlines(resolution='10m')
+    ax_lam.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
+    ax_lam.plot(lon_min, lat_min, 'orange', transform=geo)
+    ax_lam.plot(lon_opt, lat_opt, 'm', transform=geo)
+    ax_lam.plot(nodes_mesh[nodIni,0], nodes_mesh[nodIni,1], '^', color="blue", transform=geo)
+    ax_lam.plot(nodes_mesh[nodEnd,0], nodes_mesh[nodEnd,1], 'X', color="red", transform=geo)
+    ax_lam.quiver(Xnod, Ynod, U.reshape(Xnod.shape), V.reshape(Xnod.shape), scale=140, width=0.002, pivot='middle', transform=pc)
+    ax_lam.set_title(f'{name_Simu} (Lambert Conformal) - t={last_t}h')
+
+    projected_file = os.path.join(output_dir, name_Simu + "_ProjectedMaps.png")
+    fig.savefig(projected_file, dpi=300)
+    plt.show()
+    plt.close(fig)

@@ -23,24 +23,27 @@ The aliases was originally deprecated in NumPy 1.20; for more details and guidan
 #from params_GDA_STO import *
 #from params_IST_SEB import *
 #from params_HV_NAIN import *
-#from params_HAKO_KAGO import *
-# Choose Trip ID for testing
+from params_HAKO_KAGO import *
 
-TripID = 1368
-if TripID == 1351:
-    from params_TripID1351 import *
-elif TripID == 1365:
-    from params_TripID1365 import *
-elif TripID == 1368:
-    from params_TripID1368 import *
-elif TripID == 1388:
-    from params_TripID1388 import *
-elif TripID == 1398:
-    from params_TripID1398 import *
-elif TripID == 1406:
-    from params_TripID1406 import *
-else:
-    raise ValueError(f"TripID {TripID} need to be initialized for testing")
+# Choose Trip ID for testing
+TripID_bool = False #set to True to test new routes
+
+if(TripID_bool):
+    TripID = 1351
+    if TripID == 1351:
+        from params_TripID1351 import *
+    elif TripID == 1365:
+        from params_TripID1365 import *
+    elif TripID == 1368:
+        from params_TripID1368 import *
+    elif TripID == 1388:
+        from params_TripID1388 import *
+    elif TripID == 1398:
+        from params_TripID1398 import *
+    elif TripID == 1406:
+        from params_TripID1406 import *
+    else:
+        raise ValueError(f"TripID {TripID} need to be initialized for testing")
 
 #######################3
 import numpy  as np

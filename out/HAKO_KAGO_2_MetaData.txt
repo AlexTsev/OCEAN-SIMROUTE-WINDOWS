@@ -1,0 +1,15 @@
+name_Simu = 'HAKO_KAGO_2'
+LonMin = 127.000 
+LonMax = 143.000 
+LatMin = 30.000 
+LatMax = 43.000 
+inc =  1.500 
+nodIni = 321587 
+nodEnd = 25852 
+Waves_HAKO_KAGO_2_2022-11-23%2022-11-26.nc
+time_res = 3 
+t_ini = 0 
+v0 = 16.100 
+WEN_form = 1 
+Lbp = 225 
+DWT = 8000 

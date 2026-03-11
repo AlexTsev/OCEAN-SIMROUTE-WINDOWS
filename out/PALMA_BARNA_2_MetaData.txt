@@ -1,0 +1,15 @@
+name_Simu = 'PALMA_BARNA_2'
+LonMin =  2.000 
+LonMax =  5.100 
+LatMin = 38.950 
+LatMax = 41.650 
+inc =  1.500 
+nodIni = 1411 
+nodEnd = 12781 
+Waves_PALMA_BARNA_2_2023-01-20%2023-01-22.nc
+time_res = 1 
+t_ini = 9 
+v0 = 16.100 
+WEN_form = 1 
+Lbp = 225 
+DWT = 8000 
