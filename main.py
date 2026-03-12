@@ -21,8 +21,8 @@ import cartopy.feature as cfeature
 import os
 
 tic()
-mxcost=0  
-mxdks=0  
+mxcost=0
+mxdks=0
 if np.isnan(hs[nodIni,0]):
     print('The nodIni is land')
     sys.exit()
@@ -31,17 +31,17 @@ if np.isnan(hs[nodEnd,1]):
     print('The nodEnd is land')
     sys.exit()
 
-flag= testVrtx(nodIni)   
+flag= testVrtx(nodIni)
 if flag is  False:
     print('The nodIni is in vertex move!')
     sys.exit()
 
-flag= testVrtx(nodEnd)   
+flag= testVrtx(nodEnd)
 if flag is  False:
     print('The nodEnd is in vertex move!')
-    sys.exit()   
+    sys.exit()
 
-    
+
 '''   setled=np.zeros(shape=(Ny*Nx,4))
        settled each row gives information about the node corresponding to
        n. of row
@@ -60,7 +60,7 @@ if flag is  False:
        en dos casos,1 ,sense  tenin present el onatge 
        i 0 , tenin present onatge
              
- ''' 
+ '''
  ##
 ''' 
 Let's first
@@ -70,7 +70,7 @@ the length and direction of the wave i=1 The speed of the ship is constant v0
 '''
 Ldebug=[]
 print('Working very hard....!')
-for i in range(2):           
+for i in range(2):
     setled=np.zeros(shape=(Ny*Nx,4))
     min_c=np.ones(shape=(Nx*Ny,3))*np.inf
     pidx=nodIni
@@ -83,17 +83,17 @@ for i in range(2):
     '''
         pidx node to close, the first time it is the initial one, 
         it will finish when it closes the end
-    '''    
-    while (pidx != nodEnd) :   
-        setled[pidx,0]=1   # it closes the node to expland 
+    '''
+    while (pidx != nodEnd) :
+        setled[pidx,0]=1   # it closes the node to expland
         setled[pidx,1]=min_c[pidx,0];
-        setled[pidx,2]=min_c[pidx,1]; 
+        setled[pidx,2]=min_c[pidx,1];
 #        print('pidx =  {}  {} {}\n'.format( pidx,i,i))
         min_c[pidx,2]=np.inf   # it is inutilized to min
-        min_c[pidx,0]=np.inf 
+        min_c[pidx,0]=np.inf
         neighbor_ids=veins(pidx)   # expanding list of neighbors
         for cidx in neighbor_ids:
-            if setled[cidx,0]==0:   # if node is open, it works; if it is closed, nothing is done 
+            if setled[cidx,0]==0:   # if node is open, it works; if it is closed, nothing is done
                 if (not np.isnan(hs[cidx,1])):
                     if i==0:
                         g=time_edge(v0,pidx,cidx,setled[pidx,1])    # accumulated time to pass the edge
@@ -104,27 +104,27 @@ for i in range(2):
                         g=dist_nods(pidx,cidx)/v0+setled[pidx,1]
                         if mxdks<setled[pidx,1] :
                             mxdks=setled[pidx,1]
-                            print("Max. sailing time without waves (in hours) = ",mxdks) 
-                        
+                            print("Max. sailing time without waves (in hours) = ",mxdks)
+
                     heu=dist_nods(cidx,nodEnd)/v0   # heuristic time from the node to the end node
                     if (heu+g)<min_c[cidx,2]:
                             min_c[cidx,0]=g
                             min_c[cidx,1]=pidx
                             min_c[cidx,2]=heu+g
-                            
+
         pidx=int(np.where(min_c[:,2]==np.nanmin(min_c[:,2]))[0][0])
-        
+
         if pidx==nodEnd:
             setled[pidx,0]=1
             setled[pidx,1]=min_c[pidx,0]
             setled[pidx,2]=min_c[pidx,1]
-            
+
         #print('node: ',pidx)
 
     #'Finished, reconstructs the path from settled'while nod_p ~=nod_ini
     L_t=[]
     L_c=[]   # LLista amb els costos columna 1 del setled
-    nod_p =nodEnd   
+    nod_p =nodEnd
     ''' we start with the last node and look at the parents of each node 
         until we reach the Ini node
     '''
@@ -136,7 +136,7 @@ for i in range(2):
         L_t.append(nod)
         L_c.append(cos)
         nod_p=nod
-    if i==0:  
+    if i==0:
         L_Trip=L_t[::-1]
         Cost_Opt=L_c[::-1]
         CostWave=setled[nodEnd,1]
@@ -144,7 +144,7 @@ for i in range(2):
         L_TripFix=L_t[::-1]
         CostConst=setled[nodEnd,1]
         L_ConsCostTrip=L_c[::-1]
-        
+
 #Calcul de les milles fetes
 n=len(L_Trip)
 distWave=0
@@ -158,18 +158,25 @@ for i in range(n-1):
 We consider that a ship goes along the route that we have called constant
 but take into account the speed if it is affected by the waves
 We will call it the ctw route
-'''   
+'''
 CostCtw=0
 Cost_Min=[]
 Cost_Min.append(CostCtw)
-for i in range(len(L_TripFix)-1):   
+for i in range(len(L_TripFix)-1):
     CostCtw=time_edge(v0,L_TripFix[i],L_TripFix[i+1],CostCtw)
     Cost_Min.append(CostCtw)
 
 #dat=np.load(lcd_out)
 #ldc=dat['arr_0']
 #grabarem les sortides
-report='out/'+name_Simu+'_Res.txt'
+
+#output_dir = os.path.join(" 'out/'+name_Simu+'/plots' ", name_Simu)
+# Αντικατάστησε το παραπάνω με αυτό:
+report_dir = os.path.join("out", name_Simu)  # δημιουργεί τον φάκελο out/SimuName
+os.makedirs(report_dir, exist_ok=True)
+
+# Δημιουργία του αρχείου
+report = os.path.join(report_dir, name_Simu + '_Res.txt')
 frep=open(report,'w')
 st='              SIMROUTE report:     '+name_Simu+'\n'
 frep.write(st)
@@ -234,7 +241,7 @@ print ('File simulation results created: ' + report )
 
 prs = np.array([LonMin,LonMax,LatMin,LatMax,v0,inc,nodIni,nodEnd,t_ini,
                 time_res,WEN_form,Lbp,DWT])
-np.savez_compressed('out/'+name_Simu,prs,hs,dir,L_Trip,L_TripFix,
+np.savez_compressed('out/'+name_Simu+'/'+name_Simu,prs,hs,dir,L_Trip,L_TripFix,
                     Cost_Opt,L_ConsCostTrip,Cost_Min,arxW())
 ######################
 frep.write(st)
@@ -243,7 +250,7 @@ print ('File .npz results created: ' + 'out/'+name_Simu+'.npz')
 
 
 nom_reco=name_Simu+'_MetaData.txt'
-reco=open('out/'+nom_reco,'w')
+reco=open('out/'+name_Simu+'/'+nom_reco,'w')
 st='name_Simu = \''+name_Simu+'\'\n'
 reco.write(st)
 st='LonMin = {:6.3f} \n'
@@ -277,7 +284,7 @@ reco.write(st.format(int(DWT)))
 reco.close()
 print ('File simulation metadata created: ' + nom_reco)
 
-report='out/'+name_Simu+'_Route.txt'
+report='out/'+name_Simu+'/'+name_Simu+'_Route.txt'
 frout=open(report,'w')
 st='  nnod     Lon    Lat      Cost    hs      dir   \n'
 frout.write(st)
@@ -286,9 +293,9 @@ for i in range(len(L_Trip)):
     lonn=nodes[n,0]
     latt=nodes[n,1]
     if time_res==3:
-        ccost= Cost_Opt[i]/3  
-    else:    
-        ccost=Cost_Opt[i]    
+        ccost= Cost_Opt[i]/3
+    else:
+        ccost=Cost_Opt[i]
     hh=hs[n,int(np.round(ccost))]
     dirr=dir[n,int(np.round(ccost))]
     st='{:7d} {:8.3f} {:7.3f} {:7.3f} {:5.2f} {:6.2f} \n'.format(n,lonn,latt,ccost,hh,dirr)
@@ -338,7 +345,7 @@ if plot_routes == 1:
     # =====================================================
     # Create output directory for simulation
     # =====================================================
-    output_dir = os.path.join("out/plots", name_Simu)
+    output_dir = os.path.join(report_dir + '/plots')
     os.makedirs(output_dir, exist_ok=True)
 
     # =====================================================
@@ -359,7 +366,7 @@ if plot_routes == 1:
     ax.set_ylabel("Latitude")
     ax.set_title(name_Simu + " - Standard 2D Wave Map")
     ax.legend()
-
+    #print('EIKONA')
     standard_map_file = os.path.join(output_dir, name_Simu + "_Standard2DMap.png")
     fig.savefig(standard_map_file, dpi=300)
     plt.show()
@@ -478,9 +485,10 @@ if plot_routes == 1:
     # Plate-Carree
     ax_pc = plt.subplot(1,2,1, projection=pc)
     im_pc = ax_pc.pcolor(Xnod, Ynod, hs_rec, vmin=0, vmax=vmax_hs, cmap='viridis', transform=pc)
-    plt.colorbar(im_pc, ax=ax_pc, label='Wave height [m]')
+    #plt.colorbar(im_pc, ax=ax_pc, label='Wave height [m]')
     ax_pc.set_extent(extent)
     ax_pc.add_feature(cfeature.LAND)
+    ax_pc.add_feature(cfeature.OCEAN, facecolor='lightblue')
     ax_pc.coastlines(resolution='10m')
     ax_pc.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
     ax_pc.plot(lon_min, lat_min, 'orange', transform=pc, label='Minimum Distance')
@@ -494,9 +502,10 @@ if plot_routes == 1:
     # Lambert
     ax_lam = plt.subplot(1,2,2, projection=lambert)
     im_lam = ax_lam.pcolor(Xnod, Ynod, hs_rec, vmin=0, vmax=vmax_hs, cmap='viridis', transform=pc)
-    plt.colorbar(im_lam, ax=ax_lam, label='Wave height [m]')
+    #plt.colorbar(im_lam, ax=ax_lam, label='Wave height [m]')
     ax_lam.set_extent(extent, crs=pc)
     ax_lam.add_feature(cfeature.LAND)
+    ax_lam.add_feature(cfeature.OCEAN, facecolor='lightblue')
     ax_lam.coastlines(resolution='10m')
     ax_lam.gridlines(draw_labels=True, dms=True, x_inline=False, y_inline=False)
     ax_lam.plot(lon_min, lat_min, 'orange', transform=geo)
@@ -510,3 +519,7 @@ if plot_routes == 1:
     fig.savefig(projected_file, dpi=300)
     plt.show()
     plt.close(fig)
+
+    # =====================================================
+    # 4️⃣ Ship Emissions
+    # =====================================================

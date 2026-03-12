@@ -6,7 +6,7 @@ print(os.listdir(folder))
 
 # Αρχείο που κατέβασες από Copernicus
 file_trip1 = "./storeWaves/Waves_TripID_1368_2022-04-26%2022-05-10.nc"
-file_trip2 = "./storeWaves/Waves_TripID_1398_2023-04-06%2023-05-05.nc"
+file_trip2 = "./storeWaves/Waves_TripID_1388_2022-09-18%2022-10-04.nc"
 file_trip3 = "./storeWaves/Waves_MEDSEA_20200120.nc"
 
 # Άνοιγμα αρχείου με xarray
@@ -14,14 +14,20 @@ ds1 = xr.open_dataset(file_trip1)
 ds2 = xr.open_dataset(file_trip2)
 ds3 = xr.open_dataset(file_trip3)
 
+
+print("\n=== Trip 1388 ===")
+print(ds2)
+print("\nVariables available:", list(ds2.data_vars))
+
+print("\nSample wave height (VHM0) Trip 1388:")
+print(ds2["VHM0"].isel(time=0))
+
+
 # Δες τα variables και dimensions
 print("=== Trip 1368 ===")
 print(ds1)
 print("\nVariables available:", list(ds1.data_vars))
 
-print("\n=== Trip 1398 ===")
-print(ds2)
-print("\nVariables available:", list(ds2.data_vars))
 
 print("\n=== Trip Waves_MEDSEA ===")
 print(ds3)
@@ -32,8 +38,7 @@ print("\nVariables available:", list(ds3.data_vars))
 print("\nSample wave height (VHM0) Trip 1368:")
 print(ds1["VHM0"].isel(time=0))  # πρώτο timestamp
 
-print("\nSample wave height (VHM0) Trip 1398:")
-print(ds2["VHM0"].isel(time=0))
+
 
 print("\nSample wave height (VHM0) Trip Waves_MEDSEA:")
 print(ds3["VHM0"].isel(time=0))

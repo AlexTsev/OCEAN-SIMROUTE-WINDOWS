@@ -11,8 +11,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 #Simulation name
-name_Simu='TripID_1406'   #NORTH EAST OF VALENCIA(SPAIN) --> EAST OF MERCIA
-prod='GLOBAL'
+name_Simu ='TripID_1406'   #NORTH EAST OF VALENCIA(SPAIN) --> EAST OF MERCIA
+prod='MEDSEA'
 
 date_Ini = [2023, 8, 9]  # [year,month,day]
 date_End = [2023 , 8, 10]
@@ -21,10 +21,9 @@ date_End = [2023 , 8, 10]
 start_lon, start_lat = 0.1254778631202671, 39.91634172505006
 end_lon, end_lat = -0.1904513319688438, 38.01658395907805
 
-# Calculate mesh boundaries (with extension)
-mesh_extension = 1.0  # degrees
+# Mesh boundaries with extension
+mesh_extension = 2  # degrees
 
-#calculate Longmin,Lonmax,Latmin,Latmax + Mesh boundaries
 LonMin = min(start_lon, end_lon) - mesh_extension
 LonMax = max(start_lon, end_lon) + mesh_extension
 LatMin = min(start_lat, end_lat) - mesh_extension
@@ -36,19 +35,22 @@ print(f"LonMax: {LonMax}")
 print(f"LatMin: {LatMin}")
 print(f"LatMax: {LatMax}\n")
 
-
 #Grid-step in Miles
-inc=1.5    #in nautical miles
+inc=1    #in nautical miles
 
 #Extension added at boundaries (in degrees)
 dx= 0.5
 
-Nx = int((LonMax - LonMin) / dx) + 1
+inc_deg = inc / 60.0
+
+Nx = int(np.floor((LonMax - LonMin) / inc_deg) + 2)
 
 def coord_to_node(lon, lat):
-    i = round((lon - LonMin) / dx)
-    j = round((lat - LatMin) / dx)
-    return j * Nx + i
+
+    i = round((lon - LonMin) / inc_deg)
+    j = round((lat - LatMin) / inc_deg)
+
+    return int(j * Nx + i)
 
 # Initial node in mesh:
 nodIni = coord_to_node(start_lon, start_lat) #[7.33,37.60]
@@ -57,6 +59,7 @@ nodEnd = coord_to_node(end_lon, end_lat) #[-5.64,48.72]
 
 print(f"Initial node (start): {nodIni}")
 print(f"Final node (end): {nodEnd}")
+
 
 dir_arx='storeWaves/'
 
@@ -67,7 +70,7 @@ time_res=3 # In hours: 1 for all regions except o 3 for the GLOBAL
 arx_waves= 'in/waves.npz'
 
 #Initial start time of sailing from 00:00 (from 0 to 23 hours)
-t_ini=13
+t_ini=23
 
 #coastline source file:
 #arx_ldc= 'in/lcd_eu_h.dat'

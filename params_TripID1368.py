@@ -11,9 +11,9 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 #Simulation name
-name_Simu='TripID_1368'  # EAST OF GULF OF MEXICO --> SOUTH WEST OF ENGLAND (WEST OF PLYMOUTH)
+name_Simu = 'TripID_1368'  # EAST OF GULF OF MEXICO --> SOUTH WEST OF ENGLAND (WEST OF PLYMOUTH)
 #takes time to complete
-prod='GLOBAL'
+prod ='GLOBAL'
 
 date_Ini = [2022, 4, 26]  # [year,month,day]
 date_End = [2022 , 5, 10]
@@ -22,10 +22,9 @@ date_End = [2022 , 5, 10]
 start_lon, start_lat = -87.71286514153661, 25.66927574890422
 end_lon, end_lat = -6.975652456240312, 49.63944372117304
 
-# Calculate mesh boundaries (with extension)
+# Mesh boundaries with extension
 mesh_extension = 1.0  # degrees
 
-#calculate Longmin,Lonmax,Latmin,Latmax + Mesh boundaries
 LonMin = min(start_lon, end_lon) - mesh_extension
 LonMax = max(start_lon, end_lon) + mesh_extension
 LatMin = min(start_lat, end_lat) - mesh_extension
@@ -38,17 +37,21 @@ print(f"LatMin: {LatMin}")
 print(f"LatMax: {LatMax}\n")
 
 #Grid-step in Miles
-inc=1.5    #in nautical miles
+inc=2    #in nautical miles
 
 #Extension added at boundaries (in degrees)
 dx= 0.5
 
-Nx = int((LonMax - LonMin) / dx) + 1
+inc_deg = inc / 60.0
+
+Nx = int(np.floor((LonMax - LonMin) / inc_deg) + 2)
 
 def coord_to_node(lon, lat):
-    i = round((lon - LonMin) / dx)
-    j = round((lat - LatMin) / dx)
-    return j * Nx + i
+
+    i = round((lon - LonMin) / inc_deg)
+    j = round((lat - LatMin) / inc_deg)
+
+    return int(j * Nx + i)
 
 # Initial node in mesh:
 nodIni = coord_to_node(start_lon, start_lat) #[7.33,37.60]
@@ -64,7 +67,7 @@ dir_arx='storeWaves/'
 time_res=3 # In hours: 1 for all regions except o 3 for the GLOBAL
 
 #Wave interpolated file (output): 
-arx_waves= 'in/waves.npz'
+#arx_waves= 'in/waves.npz'
 
 #Initial start time of sailing from 00:00 (from 0 to 23 hours)
 t_ini=20
@@ -80,7 +83,7 @@ v0=12.92 # Cruising speed in nautical milles per hour (in knots)
 
 #Formulation WEN (Wave Effect on Navigation)
     #Bowditch = 1; Aertessen = 2; Khokhlov = 3; no reduction = 4
-WEN_form=1;
+WEN_form=2;
 
 #Ship parameteres for WEN options 2 and 3. 
 Lbp = 225; # ship's length between perpendiculars (in meters)
