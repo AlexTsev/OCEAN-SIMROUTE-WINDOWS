@@ -21,7 +21,7 @@ from func_postprocess import rumIni, rumEnd, ang_encounter
 
 # ---------------- USER INPUTS ----------------
 
-trip_id = "TripID_1406"
+trip_id = "TripID_1398"
 
 offset = 0.2
 

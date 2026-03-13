@@ -9,7 +9,7 @@ Versió 29-01-2021
 
 
 import numpy  as np
-from  params import *
+from params import *
 import math as math
 import re
 import os

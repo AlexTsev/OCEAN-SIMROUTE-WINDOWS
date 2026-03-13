@@ -365,7 +365,7 @@ if plot_routes == 1:
     ax.set_xlabel("Longitude")
     ax.set_ylabel("Latitude")
     ax.set_title(name_Simu + " - Standard 2D Wave Map")
-    ax.legend()
+    ax.legend(loc="best")
     #print('EIKONA')
     standard_map_file = os.path.join(output_dir, name_Simu + "_Standard2DMap.png")
     fig.savefig(standard_map_file, dpi=300)
@@ -377,9 +377,9 @@ if plot_routes == 1:
     # =====================================================
     print("Creating route-wave frames...")
 
-    nred = 7
-    sc = 75
-    wd_quiver = 0.002
+    nred = 10  # arrows plotted every 10 grid points
+    sc = 60    # scale factor for arrow length
+    wd_quiver = 0.002  # arrow width
     inc_frame = 1
 
     hsmax = np.nanmax(hs)
@@ -412,7 +412,7 @@ if plot_routes == 1:
         lon_min = nodes_mesh[L_TripFix[0:tc],0]
         lat_min = nodes_mesh[L_TripFix[0:tc],1]
 
-        fig, ax = plt.subplots(figsize=(7,7))
+        fig, ax = plt.subplots(figsize=(10,10))
         im = ax.pcolor(Xnod, Ynod, hs_rec, vmin=0, vmax=hsmax)
         ax.plot(lon_min, lat_min, "orange", label="Minimum distance route")
         ax.plot(lon_opt, lat_opt, "m", label="Optimized route")
@@ -420,11 +420,11 @@ if plot_routes == 1:
         ax.scatter(nodes_mesh[nodEnd,0], nodes_mesh[nodEnd,1], color="red", marker="X", s=120, label="Arrival")
         ax.quiver(Xnod[::nred,::nred], Ynod[::nred,::nred], U[::nred,::nred], V[::nred,::nred], scale=sc, width=wd_quiver)
         ax.set_title(name_Simu + " time = {:.2f} hours".format(t))
-        ax.legend()
+        ax.legend(loc="best")
         plt.colorbar(im, ax=ax)
 
         fig_file = os.path.join(output_dir, f"{name_Simu}_frame_{k:03d}.png")
-        fig.savefig(fig_file, dpi=300)
+        fig.savefig(fig_file, dpi=400)
         plt.close(fig)
         k += 1
 
@@ -454,7 +454,7 @@ if plot_routes == 1:
     lon_min = nodes_mesh[L_TripFix[0:tc], 0]
     lat_min = nodes_mesh[L_TripFix[0:tc], 1]
 
-    fig, ax = plt.subplots(figsize=(7, 7))
+    fig, ax = plt.subplots(figsize=(10, 10))
     im = ax.pcolor(Xnod, Ynod, hs_rec, vmin=0, vmax=hsmax)
     ax.plot(lon_min, lat_min, "orange", label="Minimum distance route")
     ax.plot(lon_opt, lat_opt, "m", label="Optimized route")
@@ -462,7 +462,7 @@ if plot_routes == 1:
     ax.scatter(nodes_mesh[nodEnd, 0], nodes_mesh[nodEnd, 1], color="red", marker="X", s=120, label="Arrival")
     ax.quiver(Xnod[::nred, ::nred], Ynod[::nred, ::nred], U[::nred, ::nred], V[::nred, ::nred], scale=sc, width=wd_quiver)
     ax.set_title(name_Simu + " - Last Frame (t={:.2f} hours)".format(last_t))
-    ax.legend()
+    ax.legend(loc="best")
     plt.colorbar(im, ax=ax)
     plt.show()
     plt.close(fig)
@@ -485,7 +485,7 @@ if plot_routes == 1:
     # Plate-Carree
     ax_pc = plt.subplot(1,2,1, projection=pc)
     im_pc = ax_pc.pcolor(Xnod, Ynod, hs_rec, vmin=0, vmax=vmax_hs, cmap='viridis', transform=pc)
-    #plt.colorbar(im_pc, ax=ax_pc, label='Wave height [m]')
+    plt.colorbar(im_pc, ax=ax_pc, label='Wave height [m]')
     ax_pc.set_extent(extent)
     ax_pc.add_feature(cfeature.LAND)
     ax_pc.add_feature(cfeature.OCEAN, facecolor='lightblue')
@@ -495,14 +495,14 @@ if plot_routes == 1:
     ax_pc.plot(lon_opt, lat_opt, 'm', transform=pc, label='Optimized')
     ax_pc.plot(nodes_mesh[nodIni,0], nodes_mesh[nodIni,1], '^', color="blue", transform=pc, label='Departure')
     ax_pc.plot(nodes_mesh[nodEnd,0], nodes_mesh[nodEnd,1], 'X', color="red", transform=pc, label='Arrival')
-    ax_pc.quiver(Xnod, Ynod, U.reshape(Xnod.shape), V.reshape(Xnod.shape), scale=75, width=0.002, pivot='middle', transform=pc)
-    ax_pc.legend(loc='best')
+    ax_pc.quiver(Xnod[::nred, ::nred], Ynod[::nred, ::nred], U[::nred, ::nred], V[::nred, ::nred], scale=sc, width=wd_quiver, pivot='middle', transform=pc)
+    ax_pc.legend(loc="best")
     ax_pc.set_title(f'{name_Simu} (Plate-Carree) - t={last_t}h')
 
     # Lambert
     ax_lam = plt.subplot(1,2,2, projection=lambert)
     im_lam = ax_lam.pcolor(Xnod, Ynod, hs_rec, vmin=0, vmax=vmax_hs, cmap='viridis', transform=pc)
-    #plt.colorbar(im_lam, ax=ax_lam, label='Wave height [m]')
+    plt.colorbar(im_lam, ax=ax_lam, label='Wave height [m]')
     ax_lam.set_extent(extent, crs=pc)
     ax_lam.add_feature(cfeature.LAND)
     ax_lam.add_feature(cfeature.OCEAN, facecolor='lightblue')
@@ -512,7 +512,7 @@ if plot_routes == 1:
     ax_lam.plot(lon_opt, lat_opt, 'm', transform=geo)
     ax_lam.plot(nodes_mesh[nodIni,0], nodes_mesh[nodIni,1], '^', color="blue", transform=geo)
     ax_lam.plot(nodes_mesh[nodEnd,0], nodes_mesh[nodEnd,1], 'X', color="red", transform=geo)
-    ax_lam.quiver(Xnod, Ynod, U.reshape(Xnod.shape), V.reshape(Xnod.shape), scale=140, width=0.002, pivot='middle', transform=pc)
+    ax_lam.quiver(Xnod[::nred, ::nred], Ynod[::nred, ::nred], U[::nred, ::nred], V[::nred, ::nred], scale=sc+30, width=wd_quiver, pivot='middle', transform=pc)
     ax_lam.set_title(f'{name_Simu} (Lambert Conformal) - t={last_t}h')
 
     projected_file = os.path.join(output_dir, name_Simu + "_ProjectedMaps.png")

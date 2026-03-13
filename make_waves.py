@@ -12,7 +12,7 @@ from simroute import * #   Aquest modul carrega el paramS_PROD
 from netCDF4 import Dataset 
 import scipy.interpolate
 import matplotlib.pyplot as plt
-
+import os
 
 # Plot waves after interpolation
 plot_waves = True
@@ -54,7 +54,16 @@ else:
 Xnod, Ynod = np.meshgrid(tira_lon,tira_lat)
 #sys.exit()
 
-# Ara coemncarem a construir la matriu de ones
+# To begin building the matrix of ones
+# for tripid1398 because of RAM matrices problem fix really slow
+#hsi=np.zeros((ny, nx), dtype=np.float32)
+#diri=np.zeros((ny, nx), dtype=np.float32)
+#hsi=np.zeros((ny, nx), dtype=np.float32)
+#diri=np.zeros((ny, nx), dtype=np.float32)
+#hs_rec=np.zeros((Ny,Nx,ntim), dtype=np.float32)
+#dir_rec=np.zeros((Ny,Nx,ntim), dtype=np.float32)
+
+# To begin building the matrix of ones
 hsi=np.zeros(shape=(ny,nx))
 diri=np.zeros(shape=(ny,nx))
 #fpi=np.zeros(shape=(ny,nx))
@@ -124,6 +133,8 @@ for t in range(ntim):
 
 print('Interpolation done! Assigning waves at nodes')             
 hs=np.zeros(shape=(Nx*Ny,ntim))
+## for tripid1398 because of RAM matrices problem fix really slow
+#hs=np.zeros((Nx*Ny,ntim), dtype=np.float32)
 hs.fill(np.nan)
 #fp=np.copy(hs)
 dir=np.copy(hs)
@@ -165,8 +176,6 @@ if n !=0:
     print('Find nans and eliminated :',n )
 
 
-
-                
 print("Done. Saving...")
 arxi='in/'+name_Simu+'_wInt.npz'            
 np.savez_compressed(arxi,hs,dir)
@@ -175,13 +184,19 @@ np.savez_compressed(arxi,hs,dir)
 toc()
 
 if plot_waves is True:
+    output_dir = os.path.join("out", name_Simu, "plots")
+    os.makedirs(output_dir, exist_ok=True)
     fig=plt.figure()
     t=10
     axes=fig.add_axes([0.1,0.1,0.8,0.8])
     axes.set_ylabel('Lat (º)')
     axes.set_xlabel('Lon (º)')
-    axes.set_title('Significant wave hight (in m) in time : '.format(t))
+    axes.set_title('Significant wave height (in m) in time : '.format(t))
     ima=axes.pcolor(Xnod,Ynod,hs_rec[:,:,t],vmin=0,vmax=np.nanmax(hs_rec))
-    plt.colorbar(ima)    
+    plt.colorbar(ima)
+    standard_map_file = os.path.join(output_dir, name_Simu + "_WithoutRoute_Standard2DMap.png")
+    fig.savefig(standard_map_file, dpi=300)
     plt.show()
+    plt.close(fig)
+
 

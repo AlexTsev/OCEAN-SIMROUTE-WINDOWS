@@ -12,7 +12,7 @@ output: figure at SIMROUTE/out/
 """
 
 #Simulation name:  
-name_Simu='Tunis_Nice'
+name_Simu='TripID_1368'
 
 #Offset at boundary plots (in degrees):
 offset=0.2
@@ -26,20 +26,21 @@ plot_sr=1 #Yes=1 ; No=0
 # END OF USER INPUTS   #######################
 
 import numpy as np
-from func_postprocess import *
+from PostPorcessingTools.func_postprocess import *
 import matplotlib.pyplot as plt
 import math as math
 import os
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
-import cartopy.mpl.ticker as cticker 
+import cartopy.mpl.ticker as cticker
 
-arx = '../out/'+name_Simu+'.npz'
+arx = './out/'+name_Simu+'.npz'
 if os.path.exists(arx) == False:
     print('Simulation '+arx+' not exist')
     raise SystemExit
     
 dat = np.load(arx)
+#print(dat.files)
 LonMin=dat['arr_0'][0]
 LonMax=dat['arr_0'][1]
 LatMin=dat['arr_0'][2]
@@ -61,7 +62,17 @@ L_TripFix=dat['arr_5']
 L_CostTrip=dat['arr_6']
 L_ConsCostTrip=dat['arr_7']
 Cost_Min=dat['arr_8']
-ARX=dat['arr_9']
+#ARX=dat['arr_9']
+ARX=dat['arr_8']
+
+
+# --- FIX για 1D arrays ---
+if hs.ndim == 1:
+    hs = hs.reshape(-1, 1)
+if dir.ndim == 1:
+    dir = dir.reshape(-1, 1)
+if fp.ndim == 1:
+    fp = fp.reshape(-1, 1)
 
 inc=inc/60.0    
 #Re-build Mesh:
@@ -109,6 +120,7 @@ for i in range(len(L_Trip)-1):
         ti=int(ti)
         if k==0:
             hi=hs[Ni,ti]
+
             diri=dir[Ni,ti]
             fpi=fp[Ni,ti]
             rumb=rumIni(loni,lati,lone,late)

@@ -23,10 +23,10 @@ The aliases was originally deprecated in NumPy 1.20; for more details and guidan
 #from params_GDA_STO import *
 #from params_IST_SEB import *
 #from params_HV_NAIN import *
-from params_HAKO_KAGO import *
+#from params_HAKO_KAGO import *
 
 # Choose Trip ID for testing
-TripID_bool = False #set to True to test new routes
+TripID_bool = True #set to True to test new routes
 
 if(TripID_bool):
     TripID = 1351
@@ -75,7 +75,7 @@ inc=inc*60
 LatMaxEfec=nodes[Nx*Ny-1,1]
 LonMaxEfec=nodes[Nx-1,0]
 
-# si tenim el onatge el posem, si no, no el carreguem    
+# if we have the swell we put it on, if not, we don't load it
 arx= 'in/'+name_Simu+'_wInt.npz'                   
 if os.path.exists('in/'+name_Simu+'_wInt.npz'):                        
     if t_ini==0:

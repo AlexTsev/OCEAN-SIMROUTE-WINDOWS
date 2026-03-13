@@ -12,7 +12,7 @@ import os
 from func_postprocess import dist_mn
 
 # --------------------- USER SETTINGS ---------------------
-name_Simu = 'TripID_1368'  # Name of the simulation/trip
+name_Simu = 'TripID_1398'  # Name of the simulation/trip
 
 # Engine and fuel parameters
 toTn = 1 / 1e6       # Convert g → Tn
