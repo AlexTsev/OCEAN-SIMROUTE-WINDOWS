@@ -1,0 +1,13 @@
+Simulation name: HAKO_KAGO
+Fuel Consumption opt route:    197.083 Tn
+Fuel Consumption minimum route:    174.762 Tn
+Fuel consumption reduction following optimum route: -12.77%
+Percentage of emissions mitigation following optimum route: -17.83%
+CO2 optimized: 532.188 Tn
+CO2 minimum dist.: 451.652 Tn
+SO2 optimized:   1.646 Tn
+SO2 minimum dist.:   1.397 Tn
+NOx optimized:  10.719 Tn
+NOx minimum dist.:   9.106 Tn
+PM optimized:   0.286 Tn
+PM minimum dist.:   0.243 Tn

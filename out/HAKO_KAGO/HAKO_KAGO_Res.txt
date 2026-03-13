@@ -1,4 +1,4 @@
-              SIMROUTE report:     HAKO_KAGO_2
+              SIMROUTE report:     HAKO_KAGO
 =========================================================================
 
 Initial Velocity in knots = 16.1 

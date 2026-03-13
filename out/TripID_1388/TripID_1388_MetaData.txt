@@ -10,6 +10,6 @@ Waves_TripID_1388_2022-09-18%2022-10-04.nc
 time_res = 3 
 t_ini = 20 
 v0 = 13.110 
-WEN_form = 2 
+WEN_form = 3 
 Lbp = 225 
 DWT = 8000 

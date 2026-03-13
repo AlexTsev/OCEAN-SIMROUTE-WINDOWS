@@ -1,0 +1,13 @@
+Simulation name: PALMA_BARNA
+Fuel Consumption opt route:     28.037 Tn
+Fuel Consumption minimum route:     26.993 Tn
+Fuel consumption reduction following optimum route: -3.87%
+Percentage of emissions mitigation following optimum route: -5.47%
+CO2 optimized:  73.579 Tn
+CO2 minimum dist.:  69.760 Tn
+SO2 optimized:   0.228 Tn
+SO2 minimum dist.:   0.216 Tn
+NOx optimized:   1.483 Tn
+NOx minimum dist.:   1.406 Tn
+PM optimized:   0.040 Tn
+PM minimum dist.:   0.038 Tn
