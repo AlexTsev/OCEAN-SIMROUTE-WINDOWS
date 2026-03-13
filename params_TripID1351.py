@@ -11,8 +11,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 #Simulation name
-name_Simu='TripID_1351'  #SOUTH EAST FROM PALMA --> WEST FROM FRANCE (CELTIC SEA)
-prod='GLOBAL'
+name_Simu = 'TripID_1351'  #SOUTH EAST FROM PALMA --> WEST FROM FRANCE (CELTIC SEA)
+prod = 'GLOBAL'
 
 # Trip dates
 date_Ini = [2021, 9, 29]  # [year,month,day]
@@ -23,7 +23,7 @@ start_lon, start_lat = 7.330657405963223, 37.60749174780924
 end_lon, end_lat = -5.649139448495825, 48.72385639119045
 
 # Mesh boundaries with extension
-mesh_extension = 1.0  # degrees
+mesh_extension = 2  # degrees
 
 LonMin = min(start_lon, end_lon) - mesh_extension
 LonMax = max(start_lon, end_lon) + mesh_extension
@@ -37,17 +37,21 @@ print(f"LatMin: {LatMin}")
 print(f"LatMax: {LatMax}\n")
 
 #Grid-step in Miles
-inc=1.5    #in nautical miles
+inc=1    #in nautical miles
 
 #Extension added at boundaries (in degrees)
 dx= 0.5
 
-Nx = int((LonMax - LonMin) / dx) + 1
+inc_deg = inc / 60.0
+
+Nx = int(np.floor((LonMax - LonMin) / inc_deg) + 2)
 
 def coord_to_node(lon, lat):
-    i = round((lon - LonMin) / dx)
-    j = round((lat - LatMin) / dx)
-    return j * Nx + i
+
+    i = round((lon - LonMin) / inc_deg)
+    j = round((lat - LatMin) / inc_deg)
+
+    return int(j * Nx + i)
 
 # Initial node in mesh:
 nodIni = coord_to_node(start_lon, start_lat) #[7.33,37.60]
@@ -63,7 +67,7 @@ dir_arx='storeWaves/'
 time_res =3 # In hours: 1 for all regions except o 3 for the GLOBAL
 
 #Wave interpolated file (output):
-arx_waves = 'in/waves.npz'
+#arx_waves = 'in/waves.npz'
 
 #Initial start time of sailing from 00:00 (from 0 to 23 hours)
 t_ini=6
@@ -79,9 +83,9 @@ v0=12.58 # Cruising speed in nautical milles per hour (in knots)
 
 #Formulation WEN (Wave Effect on Navigation)
     #Bowditch = 1; Aertessen = 2; Khokhlov = 3; no reduction = 4
-WEN_form=1;
+WEN_form=2;
 
-#Ship parameteres for WEN options 2 and 3. 
+#Ship parameteres for WEN options 2 and 3.
 Lbp = 225; # ship's length between perpendiculars (in meters)
 DWT = 8000; # ship's deadweight (in tons)
 

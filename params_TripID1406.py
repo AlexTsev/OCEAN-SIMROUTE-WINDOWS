@@ -11,7 +11,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 #Simulation name
-name_Simu ='TripID_1406'   #NORTH EAST OF VALENCIA(SPAIN) --> EAST OF MERCIA
+name_Simu ='TripID_1406'   #NORTH EAST OF VALENCIA(SPAIN) --> EAST OF MURCIA
 prod='MEDSEA'
 
 date_Ini = [2023, 8, 9]  # [year,month,day]

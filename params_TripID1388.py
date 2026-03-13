@@ -24,10 +24,10 @@ end_lon, end_lat = -23.240620195506, 49.63944372117304
 # Mesh boundaries with extension
 mesh_extension = 1.0  # degrees
 
-LonMin = min(start_lon, end_lon) #- mesh_extension
-LonMax = max(start_lon, end_lon) #+ mesh_extension
-LatMin = min(start_lat, end_lat) #- mesh_extension
-LatMax = max(start_lat, end_lat) #+ mesh_extension
+LonMin = min(start_lon, end_lon) - mesh_extension
+LonMax = max(start_lon, end_lon) + mesh_extension
+LatMin = min(start_lat, end_lat) - mesh_extension
+LatMax = max(start_lat, end_lat) + mesh_extension
 
 print("\nMesh boundaries:")
 print(f"LonMin: {LonMin}")
@@ -82,7 +82,7 @@ v0=13.11  # Cruising speed in nautical milles per hour (in knots)
 
 #Formulation WEN (Wave Effect on Navigation)
     #Bowditch = 1; Aertessen = 2; Khokhlov = 3; no reduction = 4
-WEN_form=2;
+WEN_form=3;
 
 #Ship parameteres for WEN options 2 and 3. 
 Lbp = 225; # ship's length between perpendiculars (in meters)

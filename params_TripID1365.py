@@ -11,8 +11,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 #Simulation name
-name_Simu='TripID_1365' #WEST OF ARABIAN SEA --> GULF OF MEXICO
-prod='GLOBAL'
+name_Simu = 'TripID_1365' #Caribbean Sea, Coast of Martinique --> GULF OF MEXICO
+prod = 'GLOBAL'
 
 # Trip dates
 date_Ini = [2022, 3, 7]  # [year,month,day]
@@ -25,7 +25,6 @@ end_lon, end_lat = -91.50521869499202, 25.25411017987707
 # Mesh boundaries with extension
 mesh_extension = 1.0  # degrees
 
-#calculate Longmin,Lonmax,Latmin,Latmax
 LonMin = min(start_lon, end_lon) - mesh_extension
 LonMax = max(start_lon, end_lon) + mesh_extension
 LatMin = min(start_lat, end_lat) - mesh_extension
@@ -38,17 +37,21 @@ print(f"LatMin: {LatMin}")
 print(f"LatMax: {LatMax}\n")
 
 #Grid-step in Miles
-inc=1.5    #in nautical miles
+inc=2    #in nautical miles
 
 #Extension added at boundaries (in degrees)
 dx= 0.5
 
-Nx = int((LonMax - LonMin) / dx) + 1
+inc_deg = inc / 60.0
+
+Nx = int(np.floor((LonMax - LonMin) / inc_deg) + 2)
 
 def coord_to_node(lon, lat):
-    i = round((lon - LonMin) / dx)
-    j = round((lat - LatMin) / dx)
-    return j * Nx + i
+
+    i = round((lon - LonMin) / inc_deg)
+    j = round((lat - LatMin) / inc_deg)
+
+    return int(j * Nx + i)
 
 # Initial node in mesh:
 nodIni = coord_to_node(start_lon, start_lat) #[7.33,37.60]
@@ -80,7 +83,7 @@ v0=12.77  # Cruising speed in nautical milles per hour (in knots)
 
 #Formulation WEN (Wave Effect on Navigation)
     #Bowditch = 1; Aertessen = 2; Khokhlov = 3; no reduction = 4
-WEN_form=1;
+WEN_form=3;
 
 #Ship parameteres for WEN options 2 and 3. 
 Lbp = 225; # ship's length between perpendiculars (in meters)
