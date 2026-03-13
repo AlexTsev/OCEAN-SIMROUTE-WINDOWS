@@ -10,12 +10,12 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 #Simulation name
 name_Simu='PALMA_BARNA'
-prod='MEDSEA'   #  producte de onatge   
+prod='MEDSEA'   #  wave product
 
-'''  ATENCIÖ  aqui posen la data de inici i final del onatge
+'''  ATTENTION here put the start and end date of the onatge
 '''
-date_Ini = [2023, 1, 20]  # [year,month,day]
-date_End = [2023, 1, 22]
+date_Ini = [2023, 5, 20]  # [year,month,day]
+date_End = [2023, 5, 22]
 #Mesh boundaries
 LonMin=2.0
 LonMax=5.1

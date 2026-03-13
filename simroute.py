@@ -29,7 +29,7 @@ The aliases was originally deprecated in NumPy 1.20; for more details and guidan
 TripID_bool = True #set to True to test new routes
 
 if(TripID_bool):
-    TripID = 1351
+    TripID = 1365
     if TripID == 1351:
         from params_TripID1351 import *
     elif TripID == 1365:
