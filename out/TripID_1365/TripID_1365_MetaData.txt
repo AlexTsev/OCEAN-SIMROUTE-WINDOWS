@@ -1,0 +1,15 @@
+name_Simu = 'TripID_1365'
+LonMin = -92.505 
+LonMax = -60.229 
+LatMin = 13.598 
+LatMax = 26.254 
+inc =  2.000 
+nodIni = 30038 
+nodEnd = 339530 
+Waves_TripID_1365_2022-03-07%2022-03-13.nc
+time_res = 3 
+t_ini = 13 
+v0 = 12.770 
+WEN_form = 3 
+Lbp = 225 
+DWT = 8000 
