@@ -8,13 +8,6 @@ SIMROUTE 2026 compatible
 Detects:
  - Parametric Rolling
  - Surfriding / Bow Tripping
-
-Compatible with:
-numpy 1.24+
-cartopy 0.21
-shapely 2.0
-
-Works with new SIMROUTE NPZ structure
 """
 
 import numpy as np
@@ -25,9 +18,10 @@ import cartopy.feature as cfeature
 
 from func_postprocess import rumIni, rumEnd, ang_encounter
 
+
 # ---------------- USER INPUTS ----------------
 
-trip_id = "TripID_1388"
+trip_id = "TripID_1406"
 
 offset = 0.2
 
@@ -35,6 +29,7 @@ plot_pr = 1
 plot_sr = 1
 
 # ---------------------------------------------
+
 
 npz_path = f"../out/{trip_id}/{trip_id}.npz"
 
@@ -46,8 +41,9 @@ print("Loading:", npz_path)
 
 dat = np.load(npz_path, allow_pickle=True)
 
+
 # ---------------------------------------------------
-# NPZ STRUCTURE (NEW)
+# NPZ STRUCTURE
 # ---------------------------------------------------
 
 meta = dat["arr_0"]
@@ -80,11 +76,13 @@ L_Trip = dat["arr_4"]
 L_CostTrip = dat["arr_5"]
 L_ConsCostTrip = dat["arr_6"]
 
+
 # ---------------------------------------------------
 
 print("HS shape:", hs.shape)
 print("FP shape:", fp.shape)
 print("Route nodes:", len(L_Trip))
+
 
 # ---------------------------------------------------
 # BUILD MESH
@@ -107,6 +105,7 @@ for j in range(Ny):
 
 print("Mesh Re-built:", nodes.shape)
 
+
 # ---------------------------------------------------
 # PARAMETERS
 # ---------------------------------------------------
@@ -116,6 +115,7 @@ epsi = 0.1
 
 L_sr_bt = []
 L_pr = []
+
 
 # ---------------------------------------------------
 # MAIN LOOP
@@ -134,7 +134,13 @@ for i in range(len(L_Trip) - 1):
 
     for k in range(2):
 
-        cost_val = L_CostTrip[i + k]
+        idx = i + k
+
+        # ---- FIX for IndexError ----
+        if idx >= len(L_CostTrip):
+            continue
+
+        cost_val = L_CostTrip[idx]
 
         if time_res == 1:
 
@@ -160,7 +166,6 @@ for i in range(len(L_Trip) - 1):
         if np.isnan(hi) or np.isnan(fpi):
             continue
 
-        # Approximate wave direction (dataset dependent)
         diri = fpi
 
         rumb = rumIni(loni, lati, lone, late) if k == 0 else rumEnd(
@@ -199,6 +204,7 @@ for i in range(len(L_Trip) - 1):
 
             L_pr.append(node)
 
+
 # ---------------------------------------------------
 # REMOVE DUPLICATES
 # ---------------------------------------------------
@@ -208,6 +214,7 @@ L_sr_bt = np.unique(L_sr_bt)
 
 print("PR nodes:", len(L_pr))
 print("SR nodes:", len(L_sr_bt))
+
 
 # ---------------------------------------------------
 # PLOT
@@ -231,12 +238,14 @@ fig = plt.figure(figsize=(12, 6))
 
 ax = plt.subplot(1, 1, 1, projection=LamC)
 
+
 # ROUTE
 
 lon = nodes[L_Trip[:-1], 0]
 lat = nodes[L_Trip[:-1], 1]
 
 ax.plot(lon, lat, "m", transform=geo, label="Optimized route")
+
 
 # START / END
 
@@ -256,9 +265,8 @@ ax.plot(
     label="Arrival",
 )
 
-# ---------------------------------------------------
+
 # PARAMETRIC ROLLING
-# ---------------------------------------------------
 
 if plot_pr and len(L_pr) > 0:
 
@@ -270,9 +278,8 @@ if plot_pr and len(L_pr) > 0:
         label="Param. rolling",
     )
 
-# ---------------------------------------------------
+
 # SURFRIDING
-# ---------------------------------------------------
 
 if plot_sr and len(L_sr_bt) > 0:
 
@@ -284,7 +291,6 @@ if plot_sr and len(L_sr_bt) > 0:
         label="Surfriding",
     )
 
-# ---------------------------------------------------
 
 ax.set_extent(extent)
 
@@ -295,6 +301,7 @@ ax.add_feature(cfeature.LAND)
 ax.gridlines(draw_labels=True)
 
 ax.legend(loc="best")
+
 
 # ---------------------------------------------------
 # SAVE
