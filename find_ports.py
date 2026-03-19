@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 from simroute import *
 
 #Introduce [Lon, Lat] to find the node at mesh:
-P1=[-57,54.275] 
+P1=[-0.1904513319688438, 38.01658395907805]
 
 # END OF USER INPUTS   #######################
 

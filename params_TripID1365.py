@@ -10,13 +10,13 @@ import numpy  as np
 from pathlib import Path
 import matplotlib.pyplot as plt
 
-#Simulation name
-name_Simu = 'TripID_1365' #Caribbean Sea, Coast of Martinique --> GULF OF MEXICO
+# Simulation name
+name_Simu = 'TripID_1365'  # Caribbean Sea, Coast of Martinique --> Gulf of Mexico
 prod = 'GLOBAL'
 
 # Trip dates
-date_Ini = [2022, 3, 7]  # [year,month,day]
-date_End = [2022 , 3, 13]
+date_Ini = [2022, 3, 7]   # [year, month, day]
+date_End = [2022, 3, 13]
 
 # Starting and ending coordinates
 start_lon, start_lat = -61.22878542394138, 14.597773738775588
@@ -24,7 +24,6 @@ end_lon, end_lat = -91.50521869499202, 25.25411017987707
 
 # Mesh boundaries with extension
 mesh_extension = 1.0  # degrees
-
 LonMin = min(start_lon, end_lon) - mesh_extension
 LonMax = max(start_lon, end_lon) + mesh_extension
 LatMin = min(start_lat, end_lat) - mesh_extension
@@ -36,62 +35,80 @@ print(f"LonMax: {LonMax}")
 print(f"LatMin: {LatMin}")
 print(f"LatMax: {LatMax}\n")
 
-#Grid-step in Miles
-inc=2    #in nautical miles
+# Grid-step in nautical miles
+inc = 2
+inc_deg = inc / 60.0  # convert to degrees
 
-#Extension added at boundaries (in degrees)
-dx= 0.5
+# Extension added at boundaries (in degrees)
+dx = 0.5
 
-inc_deg = inc / 60.0
-
+# Number of nodes along longitude
 Nx = int(np.floor((LonMax - LonMin) / inc_deg) + 2)
 
+# ------------------ FUNCTIONS ------------------
+# ---------------------------
+# coord_to_node function with debug and bounds check
+# ---------------------------
 def coord_to_node(lon, lat):
+    """
+    Convert longitude/latitude to mesh node with bounds checks.
+    """
+    # Check if coordinates are inside mesh
+    if not (LonMin <= lon <= LonMax):
+        raise ValueError(f"Longitude {lon} out of bounds [{LonMin}, {LonMax}]")
+    if not (LatMin <= lat <= LatMax):
+        raise ValueError(f"Latitude {lat} out of bounds [{LatMin}, {LatMax}]")
 
-    i = round((lon - LonMin) / inc_deg)
-    j = round((lat - LatMin) / inc_deg)
+    # Convert to node indices
+    i = int(np.floor((lon - LonMin) / inc_deg))
+    j = int(np.floor((lat - LatMin) / inc_deg))
+    node = j * Nx + i
 
-    return int(j * Nx + i)
+    # Debug info
+    print(f"coord_to_node debug: lon={lon}, lat={lat}, i={i}, j={j}, node={node}")
 
-# Initial node in mesh:
-nodIni = coord_to_node(start_lon, start_lat) #[7.33,37.60]
-# Final node in mesh:
-nodEnd = coord_to_node(end_lon, end_lat) #[-5.64,48.72]
+    return node
+
+# ------------------ INITIAL/FINAL NODES ------------------
+
+# Initial node in mesh
+#nodIni = coord_to_node(start_lon, start_lat)
+nodIni = 30038
+
+# Final node in mesh
+#nodEnd = coord_to_node(end_lon, end_lat)
+nodEnd = 338560
 
 print(f"Initial node (start): {nodIni}")
-print(f"Final node (end): {nodEnd}")
+print(f"Final node (end): {nodEnd}\n")
 
-dir_arx='storeWaves/'
+# ------------------ SIMULATION PARAMETERS ------------------
 
-#Time resolution of CMEMS product:
-time_res=3 # In hours: 1 for all regions except o 3 for the GLOBAL
+dir_arx = 'storeWaves/'
 
-#Wave interpolated file (output): 
-arx_waves= 'in/waves.npz'
+# Time resolution of CMEMS product
+time_res = 3  # hours: 1 for local regions, 3 for GLOBAL
 
-#Initial start time of sailing from 00:00 (from 0 to 23 hours)
-t_ini=13
+# Wave interpolated file (output)
+arx_waves = 'in/waves.npz'
 
-#coastline source file:
-#arx_ldc= 'in/lcd_eu_h.dat'
+# Initial start time of sailing (hour)
+t_ini = 13
 
-#coastline name output: 
-#    lcd_out= 'in/ldcK1.npz'
+# Sailing velocity (knots)
+v0 = 12.77
 
-#Sailing velocity (in knots)
-v0=12.77  # Cruising speed in nautical milles per hour (in knots)
+# Formulation WEN (Wave Effect on Navigation)
+# 1=Bowditch, 2=Aertessen, 3=Khokhlov, 4=no reduction
+WEN_form = 3
 
-#Formulation WEN (Wave Effect on Navigation)
-    #Bowditch = 1; Aertessen = 2; Khokhlov = 3; no reduction = 4
-WEN_form=3;
+# Ship parameters for WEN options 2 and 3
+Lbp = 225   # ship's length between perpendiculars (m)
+DWT = 8000  # ship's deadweight (tons)
 
-#Ship parameteres for WEN options 2 and 3. 
-Lbp = 225; # ship's length between perpendiculars (in meters)
-DWT = 8000; # ship's deadweight (in tons)
+# Plot flags
+plot_nodes = 1
+plot_waves = 1
+plot_routes = 1
 
-#Additional plot flags:
-plot_nodes=1 #Yes=1 ; No=0
-plot_waves=1 #Yes=1 ; No=0
-plot_routes=1 #Yes=1 ; No=0
-
-# END OF USER INPUTS   #######################
+# END OF USER INPUTS ########################

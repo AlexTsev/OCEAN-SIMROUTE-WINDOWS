@@ -45,17 +45,38 @@ inc_deg = inc / 10.0
 
 Nx = int(np.floor((LonMax - LonMin) / inc_deg) + 2)
 
+# ------------------ FUNCTIONS ------------------
+# ---------------------------
+# coord_to_node function with debug and bounds check
+# ---------------------------
 def coord_to_node(lon, lat):
+    """
+    Convert longitude/latitude to mesh node with bounds checks.
+    """
+    # Check if coordinates are inside mesh
+    if not (LonMin <= lon <= LonMax):
+        raise ValueError(f"Longitude {lon} out of bounds [{LonMin}, {LonMax}]")
+    if not (LatMin <= lat <= LatMax):
+        raise ValueError(f"Latitude {lat} out of bounds [{LatMin}, {LatMax}]")
 
-    i = round((lon - LonMin) / inc_deg)
-    j = round((lat - LatMin) / inc_deg)
+    # Convert to node indices
+    i = int(np.floor((lon - LonMin) / inc_deg))
+    j = int(np.floor((lat - LatMin) / inc_deg))
+    node = j * Nx + i
 
-    return int(j * Nx + i)
+    # Debug info
+    print(f"coord_to_node debug: lon={lon}, lat={lat}, i={i}, j={j}, node={node}")
+
+    return node
+
+# ------------------ INITIAL/FINAL NODES ------------------
 
 # Initial node in mesh:
-nodIni = coord_to_node(start_lon, start_lat) #[7.33,37.60]
+#nodIni = coord_to_node(start_lon, start_lat) #[7.33,37.60]
+nodIni=134204
 # Final node in mesh:
-nodEnd = coord_to_node(end_lon, end_lat) #[-5.64,48.72]
+#nodEnd = coord_to_node(end_lon, end_lat) #[-5.64,48.72]
+nodEnd=2700
 
 print(f"Initial node (start): {nodIni}")
 print(f"Final node (end): {nodEnd}")
