@@ -12,6 +12,12 @@ The results of each trip experiment are printed in its corresponding TripID fold
 Each trip has a parameter file named:
 params_TripID_....py in the source folder.
 
+Step 0: Determine Start and End Nodes (NEW)
+
+Before running a simulation, use `find_ports.py` to compute the correct initial and final node indices from the given coordinates.
+
+Run:
+
 Step 1: Select the Trip to Run
 
 Open SimRoute.py.
