@@ -5,7 +5,7 @@ LatMin = 13.598
 LatMax = 26.254 
 inc =  2.000 
 nodIni = 30038 
-nodEnd = 339530 
+nodEnd = 338560 
 Waves_TripID_1365_2022-03-07%2022-03-13.nc
 time_res = 3 
 t_ini = 13 

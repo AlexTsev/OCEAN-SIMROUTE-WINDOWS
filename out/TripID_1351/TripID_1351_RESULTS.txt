@@ -1,30 +1,33 @@
-SIMROUTE Trip Result - TripID_1351
+SIMROUTE Trip Result – TripID_1351
 -----------------------------------
 
 Status: FAILED
-Reason: Simulation could not complete. Start or end node is located on land.
+Reason: Simulation could not complete. Start or end node is located on land or in vertex mode.
 
-Start Node: 6719
-Start Location: 7.330657405963223°E, 37.60749174780924°N (Southeast from Palma)
-End Node: 146523
-End Location: -5.649139448495825°E, 48.72385639119045°N (West from France, Celtic Sea)
+Start Node: 64
+Start Location: 7.330657405963223°E, 37.60749174780924°N (Southeast from Palma, Mediterranean Sea)
+
+End Node: 3630
+End Location: -5.649139448495825°E, 48.72385639119045°N (West from France, Celtic Sea, Atlantic Ocean)
 
 Observations:
-- Excessive land coverage in the mapped area prevented path calculation.
-- The A* algorithm could not find a viable path connecting start and end nodes.
+- Start node is flagged as “vertex move,” preventing simulation start.
+- End node is flagged as “vertex move,” preventing simulation completion.
+- Distance between start and end nodes: 863.63 nautical miles.
+- Wave data contains NaNs at both start and end nodes, indicating incomplete ocean coverage in the mesh.
 - Mesh boundaries:
-    LonMin: -7.649139448495825
-    LonMax: 9.330657405963223
-    LatMin: 35.60749174780924
-    LatMax: 50.72385639119045
+    LonMin: -5.649139448495825
+    LonMax: 7.330657405963223
+    LatMin: 37.60749174780924
+    LatMax: 48.72385639119045
 - Grid step: 1 NM (inc_deg = 0.016666666666666666°)
-- Ship model: Aertssen (WEN_form=2)
-- Vessel parameters: Lbp=225 m, DWT=8000 t
+- Ship model: Aertssen (WEN_form = 2)
+- Vessel parameters: Lbp = 225 m, DWT = 8000 t
 - Cruise speed: 12.58 knots
-- Plotting: nodes=Yes, waves=Yes, routes=Yes
+- Plotting: nodes = Yes, waves = Yes, routes = Yes
 
 Recommendation:
-- Adjust starting and/or ending nodes to valid ocean positions.
+- Adjust starting and/or ending nodes to valid ocean positions outside of vertex points.
 - Consider refining the mesh boundaries to reduce land interference.
 - Verify coastal masking and map generation for this region.
 - Optionally, change WEN formulation to test other vessel behaviors.

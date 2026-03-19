@@ -1,0 +1,40 @@
+SIMROUTE Trip Result – TripID_1398
+-----------------------------------
+
+Status: FAILED
+Reason: Simulation could not start because the initial node is located on land.
+
+Start Node: 134204
+Start Location: 69.69871307204315°E, 22.622512804025988°N (West of India, Arabian Sea – near Gujarat coast)
+
+End Node: 2700
+End Location: -35.763883893187845°E, -26.15147743658466°N (South Atlantic Ocean, Southeast of Brazil)
+
+Observations:
+- The simulation terminated immediately with the message:
+      "The nodIni is land"
+- This indicates that the selected start node corresponds to a land grid cell (hs = NaN).
+- No A* pathfinding was executed because the validity check failed at initialization.
+- The start location lies very close to the coastline (Gujarat region), increasing the likelihood of snapping to a land node due to grid resolution.
+- End node appears valid, but was never evaluated due to early termination.
+- Mesh boundaries:
+    LonMin: -36.763883893187845
+    LonMax: 70.69871307204315
+    LatMin: -27.15147743658466
+    LatMax: 23.622512804025988
+- Grid step: 12 NM (inc ≈ 1.2° resolution in mesh logic)
+- Ship model: Khokhlov (WEN_form = 3)
+- Vessel parameters: Lbp = 225 m, DWT = 8000 t
+- Cruise speed: 12.03 knots
+- Plotting: nodes = Yes, waves = Yes, routes = Yes
+
+Recommendation:
+- Adjust the starting coordinates slightly offshore to ensure they fall on a valid sea node.
+- Use coord_to_node() instead of hardcoding node IDs to avoid mismatches with the mesh.
+- Reduce grid step (e.g., inc = 6 or inc = 3) to improve coastal resolution.
+- Optionally expand mesh boundaries to allow better node selection around coastlines.
+- Add a validation step to automatically relocate land nodes to nearest sea node.
+
+Notes:
+- CMEMS GLOBAL product used (time resolution = 3 h)
+- Simulation attempted on [Insert date/time of run]

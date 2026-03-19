@@ -8,7 +8,7 @@ nodIni = 74550
 nodEnd = 1862968 
 Waves_TripID_1368_2022-04-26%2022-05-10.nc
 time_res = 3 
-t_ini = 20 
+t_ini = 21 
 v0 = 12.920 
 WEN_form = 2 
 Lbp = 225 

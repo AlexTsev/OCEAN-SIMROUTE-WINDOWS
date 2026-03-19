@@ -1,13 +1,13 @@
 Simulation name: TripID_1365
-Fuel Consumption opt route:    424.862 Tn
-Fuel Consumption minimum route:    412.052 Tn
-Fuel consumption reduction following optimum route: -3.11%
-Percentage of emissions mitigation following optimum route: -3.87%
-CO2 optimized: 1106.081 Tn
-CO2 minimum dist.: 1064.897 Tn
-SO2 optimized:   3.420 Tn
+Fuel Consumption opt route:    424.641 Tn
+Fuel Consumption minimum route:    412.000 Tn
+Fuel consumption reduction following optimum route: -3.07%
+Percentage of emissions mitigation following optimum route: -3.82%
+CO2 optimized: 1105.487 Tn
+CO2 minimum dist.: 1064.763 Tn
+SO2 optimized:   3.419 Tn
 SO2 minimum dist.:   3.293 Tn
-NOx optimized:  22.298 Tn
-NOx minimum dist.:  21.470 Tn
+NOx optimized:  22.286 Tn
+NOx minimum dist.:  21.467 Tn
 PM optimized:   0.595 Tn
 PM minimum dist.:   0.573 Tn

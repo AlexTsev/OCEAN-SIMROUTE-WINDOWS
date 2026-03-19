@@ -3,17 +3,17 @@
 
 Initial Velocity in knots = 11.94 
 WEN_form = 1 
-Departure:  Node =  60979  --  coordinates  (0.1262,39.9166)
-Departure time (day-month-year hour:min): 9-8-2023 23:00
+Departure:  Node =  60718  --  coordinates  (0.1095,39.8999)
+Departure time (day-month-year hour:min): 9-8-2023 0:00
 Arrival:     Node =  31320  --  coordinates  (-0.1905,38.0166)
 Number of nodes: Nx=   260   Ny=   355   Nx*Ny= 92300   
-Geodetic Distance (in milles): 114.95
+Geodetic Distance (in milles): 113.86
  
 ========================================================================
                                         Sailed hours    Sailed milles
-Route Optimized:                           10.08            119.49    
-Route Minimum Distance:                   10.08            119.49    
-Route Minimum Distance (without waves):    10.01            119.49    
+Route Optimized:                           10.03            118.56    
+Route Minimum Distance:                   10.03            118.56    
+Route Minimum Distance (without waves):     9.93            118.56    
 
 ========================================================================
 
